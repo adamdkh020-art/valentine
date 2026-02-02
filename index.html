@@ -2,6 +2,7 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Valentine 💖</title>
   <style>
     body {
@@ -12,53 +13,60 @@
       font-family: Arial, sans-serif;
       background: linear-gradient(135deg, #ff9a9e, #fad0c4);
       overflow: hidden;
+      margin: 0;
     }
 
     .card {
       background: white;
-      padding: 40px;
+      padding: 25px;
       border-radius: 20px;
       text-align: center;
       box-shadow: 0 10px 25px rgba(0,0,0,0.2);
       position: relative;
       z-index: 2;
+      width: 90%;
+      max-width: 350px;
     }
 
     h1 {
-      margin-bottom: 30px;
+      margin-bottom: 25px;
+      font-size: 22px;
     }
 
     .buttons {
       display: flex;
       justify-content: center;
-      gap: 20px;
+      gap: 15px;
       position: relative;
+      height: 80px;
     }
 
     button {
-      font-size: 20px;
-      padding: 15px 30px;
+      font-size: 18px;
+      padding: 14px 22px;
       border: none;
-      border-radius: 10px;
+      border-radius: 12px;
       cursor: pointer;
-      transition: all 0.3s ease;
-      position: relative;
+      transition: transform 0.25s ease;
+      touch-action: manipulation;
     }
 
     #yes {
       background-color: #ff4d6d;
       color: white;
+      z-index: 2;
     }
 
     #no {
       background-color: #ccc;
       color: #333;
       position: absolute;
-      right: -120px;
+      right: 0;
+      z-index: 1;
     }
 
     .message {
-      font-size: 24px;
+      font-size: 20px;
       color: #ff4d6d;
       margin-top: 20px;
     }
@@ -66,20 +74,15 @@
     .heart {
       position: absolute;
       color: #ff4d6d;
-      font-size: 20px;
-      animation: float 5s linear infinite;
+      font-size: 18px;
+      animation: float 4s linear infinite;
       opacity: 0.8;
+      pointer-events: none;
     }
 
     @keyframes float {
-      0% {
-        transform: translateY(0) scale(1);
-        opacity: 1;
-      }
-      100% {
-        transform: translateY(-100vh) scale(1.5);
-        opacity: 0;
-      }
+      0% { transform: translateY(0) scale(1); opacity: 1; }
+      100% { transform: translateY(-100vh) scale(1.5); opacity: 0; }
     }
   </style>
 </head>
@@ -98,16 +101,25 @@
     const noBtn = document.getElementById('no');
     const message = document.getElementById('message');
 
-    let scale = 1;
+    let noScale = 1;
+    let yesScale = 1;
 
-    noBtn.addEventListener('click', () => {
-      const x = Math.random() * 300 - 150;
-      const y = Math.random() * 300 - 150;
-      noBtn.style.transform = `translate(${x}px, ${y}px) scale(${Math.max(0.4, scale - 0.15)})`;
-      scale -= 0.15;
-      if (scale < 0.4) scale = 0.4;
-      yesBtn.style.transform = `scale(${1 + (1 - scale)})`;
-    });
+    function moveNoButton() {
+      const x = Math.random() * 200 - 100;
+      const y = Math.random() * 120 - 60;
+
+      noScale -= 0.15;
+      if (noScale < 0.4) noScale = 0.4;
+
+      yesScale += 0.15;
+
+      noBtn.style.transform = `translate(${x}px, ${y}px) scale(${noScale})`;
+      yesBtn.style.transform = `scale(${yesScale})`;
+    }
+
+    // Mobile + PC
+    noBtn.addEventListener('click', moveNoButton);
+    noBtn.addEventListener('touchstart', moveNoButton);
 
     yesBtn.addEventListener('click', () => {
       document.getElementById('buttons').style.display = 'none';
@@ -119,15 +131,13 @@
       heart.classList.add('heart');
       heart.textContent = '❤';
       heart.style.left = Math.random() * 100 + 'vw';
-      heart.style.fontSize = Math.random() * 20 + 15 + 'px';
+      heart.style.fontSize = Math.random() * 14 + 16 + 'px';
       document.body.appendChild(heart);
 
-      setTimeout(() => {
-        heart.remove();
-      }, 5000);
+      setTimeout(() => heart.remove(), 4000);
     }
 
-    setInterval(createHeart, 300);
+    setInterval(createHeart, 350);
   </script>
 </body>
 </html>
